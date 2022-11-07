@@ -26,6 +26,8 @@ const CustomTextInput = ({
           search && styles.search,
           {
             height: description && 150,
+            paddingLeft: description ? 10 : 50,
+            lineHeight: description ? 20 : null,
           },
         ]}
       />

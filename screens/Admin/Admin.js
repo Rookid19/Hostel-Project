@@ -80,7 +80,7 @@ const Admin = () => {
             style={{ height: 300, width: "100%", marginBottom: 30 }}
           />
         )}
-        <CustomTextInput label="name" icon="user" />
+        <CustomTextInput label="name" icon="home" />
         <CustomTextInput label="Location" icon="location" location={true} />
         <CustomTextInput label="Fees" icon="briefcase" />
         <Text style={styles.label}>Vacancy</Text>
@@ -106,6 +106,7 @@ const Admin = () => {
           <StyledButtonText>Submit</StyledButtonText>
         </StyledButton>
       </ScrollView>
+      
     </SafeAreaView>
   );
 };
