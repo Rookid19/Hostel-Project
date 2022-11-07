@@ -13,6 +13,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { CustomModal } from "../../components/CustomModal";
 import { Ionicons } from "@expo/vector-icons";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Admin = () => {
   const [image, setImage] = useState(null);
@@ -23,7 +25,18 @@ const Admin = () => {
   const [fees, setFees] = useState("");
   const [description, setDescription] = useState("");
 
-  const submit = () => {};
+  const valid =
+    status != "" && name != "" && location != "" && fees != "" && description;
+
+  const submit = () => {
+    setDoc(doc(db, "Admin", "hostels", name, "info"), {
+      name,
+      location,
+      fees,
+      description,
+      status,
+    }).catch((error) => alert(error.message));
+  };
 
   //camera permissions
   useEffect(() => {
@@ -80,9 +93,26 @@ const Admin = () => {
             style={{ height: 300, width: "100%", marginBottom: 30 }}
           />
         )}
-        <CustomTextInput label="name" icon="home" />
-        <CustomTextInput label="Location" icon="location" location={true} />
-        <CustomTextInput label="Fees" icon="briefcase" />
+        <CustomTextInput
+          label="name"
+          icon="home"
+          onChangeText={(text) => setName(text)}
+          value={name}
+        />
+        <CustomTextInput
+          label="Location"
+          icon="location"
+          location={true}
+          onChangeText={(text) => setLocation(text)}
+          value={location}
+        />
+        <CustomTextInput
+          label="Fees"
+          icon="briefcase"
+          onChangeText={(text) => setFees(text)}
+          value={fees}
+          keyboardType="numeric"
+        />
         <Text style={styles.label}>Vacancy</Text>
         <TouchableOpacity
           style={styles.statusInput}
@@ -101,12 +131,13 @@ const Admin = () => {
           label="Description"
           description={true}
           multiline={true}
+          onChangeText={(text) => setDescription(text)}
+          value={description}
         />
-        <StyledButton style={styles.button}>
+        <StyledButton style={styles.button} disabled={!valid} onPress={submit}>
           <StyledButtonText>Submit</StyledButtonText>
         </StyledButton>
       </ScrollView>
-      
     </SafeAreaView>
   );
 };

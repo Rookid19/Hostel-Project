@@ -7,7 +7,7 @@ import Animated from "react-native-reanimated";
 
 const CreateAccount = () => {
   //useAuth hook
-  const { openSheet, fall, signUp, closeSheet, bs } = useAuth();
+  const { openSheet, fall, signUp } = useAuth();
   const [hidePassword, setHidePassword] = useState(true);
   const [disable, setDisable] = useState(false);
   const [editable, setEditable] = useState(true);
@@ -21,7 +21,15 @@ const CreateAccount = () => {
     setEditable(false);
     setDisable(true);
     openSheet(1, 300);
-    signUp(firstName, lastName, email, level, password,setEditable,setDisable);
+    signUp(
+      firstName,
+      lastName,
+      email,
+      level,
+      password,
+      setEditable,
+      setDisable
+    );
   };
 
   return (
