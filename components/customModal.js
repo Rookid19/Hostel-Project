@@ -1,9 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 
+const { height } = Dimensions.get("window");
+
 export const CustomModal = ({ setStatus, setVisible }) => {
- 
- 
   // select
   const select = (text) => {
     setStatus(text);
@@ -24,7 +30,7 @@ export const CustomModal = ({ setStatus, setVisible }) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: "20%",
+    top: height / 2,
     borderRadius: 5,
     width: "80%",
     elevation: 6,
@@ -43,9 +49,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   label: {
-    fontSize: 16,
+    fontSize: 20,
     marginLeft: 10,
     lineHeight: 30,
-    marginVertical: 2,
+    marginVertical: 5,
+    fontFamily: "Medium",
   },
 });

@@ -18,8 +18,13 @@ const Admin = () => {
   const [image, setImage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [fees, setFees] = useState("");
+  const [description, setDescription] = useState("");
 
-  // const [imageUrl, setImageUrl] = useState("");
+  const submit = () => {};
+
   //camera permissions
   useEffect(() => {
     (async () => {
@@ -75,9 +80,9 @@ const Admin = () => {
             style={{ height: 300, width: "100%", marginBottom: 30 }}
           />
         )}
-        <CustomTextInput label="name" />
-        <CustomTextInput label="Location" />
-        <CustomTextInput label="Fees" />
+        <CustomTextInput label="name" icon="user" />
+        <CustomTextInput label="Location" icon="location" location={true} />
+        <CustomTextInput label="Fees" icon="briefcase" />
         <Text style={styles.label}>Vacancy</Text>
         <TouchableOpacity
           style={styles.statusInput}
@@ -92,7 +97,11 @@ const Admin = () => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <CustomTextInput label="Description" description={true} />
+        <CustomTextInput
+          label="Description"
+          description={true}
+          multiline={true}
+        />
         <StyledButton style={styles.button}>
           <StyledButtonText>Submit</StyledButtonText>
         </StyledButton>
@@ -140,9 +149,8 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
     color: Colors.black,
     marginLeft: "10%",
-    // marginTop: 30,
   },
-  button:{
-    marginVertical:20
-  }
+  button: {
+    marginVertical: 20,
+  },
 });

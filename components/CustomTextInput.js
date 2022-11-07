@@ -13,31 +13,44 @@ const CustomTextInput = ({
   setHidePassword,
   isPassword,
   search,
+  description,
+  location,
   ...props
 }) => {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
-      <StyledTextInput {...props} style={[search && styles.search, {}]} />
-      <LeftIcon style={{ flexDirection: "row" }}>
-        <Feather
-          name={icon}
-          size={24}
-          color="black"
-         style={search && styles.searchIcon}
-        />
-      </LeftIcon>
+      <StyledTextInput
+        {...props}
+        style={[
+          search && styles.search,
+          {
+            height: description && 150,
+          },
+        ]}
+      />
+      {location ? (
+        <LeftIcon style={{ flexDirection: "row" }}>
+          <Ionicons name="ios-location-outline" size={24} color="black" />
+        </LeftIcon>
+      ) : (
+        <LeftIcon style={{ flexDirection: "row" }}>
+          <Feather
+            name={icon}
+            size={24}
+            color="black"
+            style={search && styles.searchIcon}
+          />
+        </LeftIcon>
+      )}
+
       {isPassword && (
         <RightIcon
           onPress={() => {
             setHidePassword(!hidePassword);
           }}
         >
-          <Ionicons
-            name={icon1}
-            size={25}
-            color={Colors.black}
-          />
+          <Ionicons name={icon1} size={25} color={Colors.black} />
         </RightIcon>
       )}
       {search && (
@@ -80,7 +93,7 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     marginRight: -20,
-    marginTop : Platform.OS == "ios"?  -10: 0,
+    marginTop: Platform.OS == "ios" ? -10 : 0,
     backgroundColor: Colors.lightBlue,
     width: 30,
     shadowColor: Colors.lightBlue,
