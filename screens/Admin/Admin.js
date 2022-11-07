@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -13,8 +12,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { CustomModal } from "../../components/CustomModal";
 import { Ionicons } from "@expo/vector-icons";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import LottieView from "lottie-react-native";
 
 const Admin = () => {
   const [image, setImage] = useState(null);
@@ -24,18 +24,36 @@ const Admin = () => {
   const [location, setLocation] = useState("");
   const [fees, setFees] = useState("");
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(
+    <StyledButtonText>Submit</StyledButtonText>
+  );
 
   const valid =
     status != "" && name != "" && location != "" && fees != "" && description;
 
   const submit = () => {
-    setDoc(doc(db, "Admin", "hostels", name, "info"), {
-      name,
-      location,
-      fees,
-      description,
-      status,
-    }).catch((error) => alert(error.message));
+    setLoading(
+      <LottieView
+        source={require("../../assets/animation/activityIndicator.json")}
+        style={styles.lottieView}
+        autoPlay
+        speed={1}
+      />
+    );
+    setDoc(
+      doc(db, "Admin", "hostels", name, "info"),
+      {
+        name,
+        location,
+        fees,
+        description,
+        status,
+      },
+      {
+        merge: true,
+      }
+    ).catch((error) => alert(error.message));
+    setLoading(<StyledButtonText>Submit</StyledButtonText>);
   };
 
   //camera permissions
@@ -135,7 +153,7 @@ const Admin = () => {
           value={description}
         />
         <StyledButton style={styles.button} disabled={!valid} onPress={submit}>
-          <StyledButtonText>Submit</StyledButtonText>
+          {loading}
         </StyledButton>
       </ScrollView>
     </SafeAreaView>
@@ -184,5 +202,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 20,
+  },
+  lottieView: {
+    height: 25,
+    alignSelf: "center",
   },
 });
