@@ -11,9 +11,13 @@ import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
+import { CustomModal } from "../../components/CustomModal";
+import { Ionicons } from "@expo/vector-icons";
 
 const Admin = () => {
   const [image, setImage] = useState(null);
+  const [visible, setVisible] = useState(false);
+
   // const [imageUrl, setImageUrl] = useState("");
   //camera permissions
   useEffect(() => {
@@ -54,6 +58,7 @@ const Admin = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        {visible && <CustomModal />}
         {!image ? (
           <TouchableOpacity
             style={styles.imageUploadContainer}
@@ -70,7 +75,19 @@ const Admin = () => {
         <CustomTextInput label="name" />
         <CustomTextInput label="Location" />
         <CustomTextInput label="Fees" />
-        <CustomTextInput label="Status" />
+        <TouchableOpacity
+          style={styles.countryInput}
+          onPress={() => setVisible(true)}
+          activeOpacity={1}
+        >
+          <Text style={styles.countryLabel}>tsdfs</Text>
+          <Ionicons
+            name="ios-chevron-down-outline"
+            size={20}
+            color="black"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
         <CustomTextInput label="Description" description={true} />
         <StyledButton>
           <StyledButtonText>Submit</StyledButtonText>

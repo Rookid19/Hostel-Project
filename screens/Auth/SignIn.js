@@ -4,8 +4,8 @@ import CustomTextInput from "../../components/CustomTextInput";
 import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
 
 const SignIn = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("Admin@gmail.com");
+  const [password, setPassword] = useState("Admin@123");
   const [hidePassword, setHidePassword] = useState(true);
   const [loading, setLoading] = useState(
     <StyledButtonText>Submit</StyledButtonText>
@@ -25,12 +25,14 @@ const SignIn = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.space}></Text>
       <CustomTextInput
+        value={email}
         label="Email"
         icon="credit-card"
         onChangeText={(text) => setEmail(text)}
       />
 
       <CustomTextInput
+        value={password}
         label="Password"
         icon="lock"
         isPassword={true}
