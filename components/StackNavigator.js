@@ -39,7 +39,7 @@ const StackNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={globalScreenOptions}
-      initialRouteName="Admin Page"
+      // initialRouteName="Admin Page"
     >
       {user ? (
         <>

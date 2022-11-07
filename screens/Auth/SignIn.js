@@ -15,7 +15,7 @@ const SignIn = ({ navigation }) => {
     let Email = email.toLowerCase();
     let Password = password.toLowerCase();
     if (Email == "admin@gmail.com" && Password == "admin@123") {
-      navigation.navigate("Admin Page");
+      navigation.replace("Admin Page");
     } else {
       return null;
     }
