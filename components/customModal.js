@@ -1,13 +1,20 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-export const CustomModal = () => {
+export const CustomModal = ({ setStatus, setVisible }) => {
+ 
+ 
+  // select
+  const select = (text) => {
+    setStatus(text);
+    setVisible(false);
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => select("Rooms Available")}>
         <Text style={styles.label}>Rooms Available</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => select("No Rooms Available")}>
         <Text style={styles.label}>No Rooms Available</Text>
       </TouchableOpacity>
     </View>

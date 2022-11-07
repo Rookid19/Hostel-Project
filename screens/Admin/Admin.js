@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 const Admin = () => {
   const [image, setImage] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [status, setStatus] = useState("");
 
   // const [imageUrl, setImageUrl] = useState("");
   //camera permissions
@@ -58,7 +59,9 @@ const Admin = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {visible && <CustomModal />}
+        {visible && (
+          <CustomModal setVisible={setVisible} setStatus={setStatus} />
+        )}
         {!image ? (
           <TouchableOpacity
             style={styles.imageUploadContainer}
@@ -75,12 +78,13 @@ const Admin = () => {
         <CustomTextInput label="name" />
         <CustomTextInput label="Location" />
         <CustomTextInput label="Fees" />
+        <Text style={styles.label}>Vacancy</Text>
         <TouchableOpacity
-          style={styles.countryInput}
+          style={styles.statusInput}
           onPress={() => setVisible(true)}
           activeOpacity={1}
         >
-          <Text style={styles.countryLabel}>tsdfs</Text>
+          <Text style={styles.statusLabel}>{status}</Text>
           <Ionicons
             name="ios-chevron-down-outline"
             size={20}
@@ -89,7 +93,7 @@ const Admin = () => {
           />
         </TouchableOpacity>
         <CustomTextInput label="Description" description={true} />
-        <StyledButton>
+        <StyledButton style={styles.button}>
           <StyledButtonText>Submit</StyledButtonText>
         </StyledButton>
       </ScrollView>
@@ -114,4 +118,31 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     fontSize: 18,
   },
+  statusInput: {
+    height: 49,
+    width: "80%",
+    paddingVertical: 15,
+    paddingHorizontal: 18,
+    backgroundColor: Colors.lighterGray,
+    alignSelf: "center",
+    marginVertical: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  statusLabel: {
+    fontSize: 16,
+    fontFamily: "Medium",
+  },
+  label: {
+    fontSize: 16,
+    fontFamily: "Helvetica",
+    color: Colors.black,
+    marginLeft: "10%",
+    // marginTop: 30,
+  },
+  button:{
+    marginVertical:20
+  }
 });
