@@ -2,10 +2,14 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import CustomTextInput from "../../components/CustomTextInput";
 import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
+import LottieView from "lottie-react-native";
+
 
 const SignIn = ({ navigation }) => {
-  const [email, setEmail] = useState("Admin@gmail.com");
-  const [password, setPassword] = useState("Admin@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [loading, setLoading] = useState(
     <StyledButtonText>Submit</StyledButtonText>
@@ -17,7 +21,18 @@ const SignIn = ({ navigation }) => {
     if (Email == "admin@gmail.com" && Password == "admin@123") {
       navigation.replace("Admin Page");
     } else {
-      return null;
+      <LottieView
+        source={require("../../assets/animation/activityIndicator.json")}
+        style={styles.lottieView}
+        autoPlay
+        speed={1}
+      />;
+      signInWithEmailAndPassword(auth, email, password).catch((error) => {
+        alert(error.message);
+        setLoading(
+          <StyledButtonText style={styles.regular}>Submit</StyledButtonText>
+        );
+      });
     }
   };
 
@@ -61,5 +76,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
+  },
+  lottieView: {
+    height: 25,
+    alignSelf: "center",
   },
 });

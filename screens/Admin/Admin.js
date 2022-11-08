@@ -12,11 +12,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { CustomModal } from "../../components/CustomModal";
 import { Ionicons } from "@expo/vector-icons";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import LottieView from "lottie-react-native";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { set } from "react-native-reanimated";
 
 const Admin = () => {
   const [image, setImage] = useState(null);
@@ -32,7 +31,12 @@ const Admin = () => {
   const [extension, setExtension] = useState("");
 
   const valid =
-    status != "" && name != "" && location != "" && fees != "" && description;
+    status != "" &&
+    name != "" &&
+    location != "" &&
+    fees != "" &&
+    description &&
+    image != null;
 
   const submit = async () => {
     setLoading(
@@ -256,7 +260,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontFamily: "Helvetica",
+    fontFamily: "Medium",
     color: Colors.black,
     marginLeft: "10%",
   },

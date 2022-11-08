@@ -28,6 +28,7 @@ const CustomTextInput = ({
             height: description && 150,
             paddingLeft: description ? 10 : 50,
             lineHeight: description ? 20 : null,
+            textAlignVertical: description ? "top" : null,
           },
         ]}
       />

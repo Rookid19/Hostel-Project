@@ -5,6 +5,7 @@ import CustomTextInput from "../../components/CustomTextInput";
 import { FlatList } from "react-native-gesture-handler";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { auth } from "../../firebase";
 
 const Dashboard = ({ navigation }) => {
   const image =
@@ -60,7 +61,7 @@ const Dashboard = ({ navigation }) => {
           color={Colors.blackishBlue}
           style={styles.icon}
         />
-        <TouchableOpacity onPress={() =>navigation.navigate("Profile")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <Feather
             name="user"
             size={30}
@@ -69,7 +70,7 @@ const Dashboard = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <Text style={styles.name}>Hi Jack</Text>
+      <Text style={styles.name}>Hi {auth?.currentUser?.displayName}</Text>
       <Text style={styles.title}>Find your hostel</Text>
       <CustomTextInput search={true} icon="search" />
 

@@ -110,13 +110,13 @@ export const AuthProvider = ({ children }) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // navigation.navigate("Dashboard");
-        setUser(false);
+        setUser(true);
       } else {
         setUser(null);
       }
       setLoadingInitial(false);
     });
-    [];
+    [user];
   });
 
   return (
