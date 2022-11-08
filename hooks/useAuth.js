@@ -92,6 +92,24 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  //Checks if there is a user Logged In
+  useEffect(() => {
+    onAuthStateChanged(
+      auth,
+      (user) => {
+        if (user) {
+          // navigation.navigate("Enter Passcode");
+          setUser(user);
+        } else {
+          setUser(false);
+          // alert("no user");
+        }
+        // setLoadingInitial(false);
+      },
+      [user]
+    );
+  }, [user]);
+
   // allows you to memoize expensive functions so that you can avoid calling them on every render
   const memoVaue = useMemo(
     () => ({
@@ -102,22 +120,10 @@ export const AuthProvider = ({ children }) => {
       closeSheet,
       signUp,
     }),
-    [user, openSheet, closeSheet, signUp, bs]
+    [user, setUser, openSheet, closeSheet, signUp, bs]
   );
 
   //Checks if there is a user Logged In
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // navigation.navigate("Dashboard");
-        setUser(true);
-      } else {
-        setUser(null);
-      }
-      setLoadingInitial(false);
-    });
-    [user];
-  });
 
   return (
     <AuthContext.Provider value={memoVaue}>

@@ -1,9 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "../../utils/styles";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const Profile = () => {
+  const userSignOut = () => {
+    signOut(auth)
+      //  .then(() => {
+      //     navigation.navigate("Welcome");
+      //  })
+      .catch((error) => alert(error.message));
+    // .finally(() => setSignOutLoading(<ButtonText>Sign Out</ButtonText>));
+  };
+
   return (
     <View style={styles.container}>
       <FontAwesome
@@ -13,7 +24,11 @@ const Profile = () => {
         style={styles.icon}
       />
 
-      <View style={styles.card}></View>
+      <View style={styles.card}>
+        <TouchableOpacity style={styles.signOut} onPress={userSignOut}>
+          <Text style={styles.signOutText}>Sign out</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -33,5 +48,15 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     backgroundColor: Colors.white,
+  },
+  signOut: {
+    alignSelf: "center",
+    bottom: 0,
+    position: "absolute",
+    marginBottom: 20,
+  },
+  signOutText: {
+    fontSize: 22,
+    fontFamily: "Medium",
   },
 });
