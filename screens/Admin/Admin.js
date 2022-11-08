@@ -13,8 +13,10 @@ import * as ImagePicker from "expo-image-picker";
 import { CustomModal } from "../../components/CustomModal";
 import { Ionicons } from "@expo/vector-icons";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, storage } from "../../firebase";
 import LottieView from "lottie-react-native";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { set } from "react-native-reanimated";
 
 const Admin = () => {
   const [image, setImage] = useState(null);
@@ -27,11 +29,12 @@ const Admin = () => {
   const [loading, setLoading] = useState(
     <StyledButtonText>Submit</StyledButtonText>
   );
+  const [extension, setExtension] = useState("");
 
   const valid =
     status != "" && name != "" && location != "" && fees != "" && description;
 
-  const submit = () => {
+  const submit = async () => {
     setLoading(
       <LottieView
         source={require("../../assets/animation/activityIndicator.json")}
@@ -40,20 +43,81 @@ const Admin = () => {
         speed={1}
       />
     );
-    setDoc(
-      doc(db, "Admin", "hostels", name, "info"),
-      {
-        name,
-        location,
-        fees,
-        description,
-        status,
+
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", image, true);
+      xhr.send(null);
+    });
+
+    // get file name from file
+
+    const storageRef = ref(
+      storage,
+      "hostel" + new Date().toISOString() + "." + extension
+    );
+
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //    setProgress(progress);
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused": // or 'paused'
+            console.log("Upload is paused");
+            break;
+          case "running": // or 'running'
+            console.log("Upload is running");
+            break;
+        }
       },
-      {
-        merge: true,
+      (error) => {
+        // Handle unsuccessful uploads
+        console.log(error);
+        alert(error.message);
+      },
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("download url --- > " + downloadURL);
+          setDoc(
+            doc(db, "Admin", "hostels", name, "info"),
+            {
+              name,
+              location,
+              fees,
+              description,
+              status,
+              image: downloadURL,
+            },
+            {
+              merge: true,
+            }
+          ).catch((error) => alert(error.message));
+          setLoading(<StyledButtonText>Submit</StyledButtonText>);
+          setName("");
+          setLocation("");
+          setFees("");
+          setStatus("");
+          setDescription();
+          setImage(null);
+        });
       }
-    ).catch((error) => alert(error.message));
-    setLoading(<StyledButtonText>Submit</StyledButtonText>);
+    );
   };
 
   //camera permissions
@@ -82,14 +146,10 @@ const Admin = () => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      // setImage("dsf");
-      // setImage(
-      //   <Text style={{ textAlign: "center" }}>Uploaded Succesfully</Text>
-      // );
       let uri = result.uri;
       let fileExtension = uri.substr(uri.lastIndexOf(".") + 1);
-      //  setImage(fileExtension);
-      console.log("file extension--->  " + fileExtension);
+      setExtension(fileExtension);
+      // console.log("file extension--->  " + fileExtension);
     }
   };
   return (
