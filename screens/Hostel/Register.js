@@ -2,9 +2,11 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import LottieView from "lottie-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Register = ({ route, navigation }) => {
   const [hostelName] = useState(route?.params?.name);
@@ -53,6 +55,8 @@ const Register = ({ route, navigation }) => {
         guardianContact,
       }
     ).catch((error) => alert(error.message));
+    await AsyncStorage.setItem("my_hostel", hostelName);
+
     navigation.navigate("My Hostel");
     setLoading(<StyledButtonText>Register</StyledButtonText>);
   };

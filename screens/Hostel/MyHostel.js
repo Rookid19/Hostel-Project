@@ -13,9 +13,12 @@ import { collection, doc, getDoc, getDocs, query } from "firebase/firestore";
 import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "../../utils/styles";
 import { FlatList } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const MyHostel = ({ navigation, route }) => {
   const [hostel, setHostel] = useState([]);
+  const [hostelName,setHosteName] = useState("")
 
   const abc = async () => {
     const docRef = doc(
@@ -36,7 +39,10 @@ const MyHostel = ({ navigation, route }) => {
   };
 
   const fectchHostelUser = async () => {
-    const q = query(collection(db, "Admin", "usersHostels", "Sterner"));
+    let hostel_name = await AsyncStorage.getItem("my_hostel");
+    setHosteName(hostel_name)
+    // console.log(c);
+    const q = query(collection(db, "Admin", "usersHostels", hostel_name));
     const querySnapshot = await getDocs(q);
 
     setHostel(
@@ -66,16 +72,18 @@ const MyHostel = ({ navigation, route }) => {
               color="black"
               style={styles.icon}
             />
-            <Text style={styles.header}>Sterner hostel</Text>
+            <Text style={styles.header}>{hostelName} hostel</Text>
           </TouchableOpacity>
           <FlatList
             data={hostel}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.listComponent}
-                onPress={() => navigation.navigate("Chat",{
-                  chatName : item?.data?.firstName
-                })}
+                onPress={() =>
+                  navigation.navigate("Chat", {
+                    chatName: item?.data?.firstName,
+                  })
+                }
               >
                 <FontAwesome
                   name="user-circle"
