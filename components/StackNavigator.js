@@ -58,6 +58,24 @@ const StackNavigator = () => {
             }}
             component={Profile}
           />
+          <Stack.Screen
+            name="Hostel Details"
+            options={{
+              headerTitle: "Hostel Details",
+              headerTitleAlign: "center",
+              headerTitleStyle: headerTitle,
+            }}
+            component={HostelDetails}
+          />
+          <Stack.Screen
+            name="Register Hostel"
+            options={{
+              headerTitle: "Regisration",
+              headerTitleAlign: "center",
+              headerTitleStyle: headerTitle,
+            }}
+            component={Register}
+          />
         </>
       ) : (
         <>
@@ -88,29 +106,6 @@ const StackNavigator = () => {
             name="Admin Page"
             options={{ headerShown: false }}
             component={Admin}
-          />
-          {/* <Stack.Screen
-            name="Dashboard"
-            options={{ headerShown: false }}
-            component={Dashboard}
-          /> */}
-          <Stack.Screen
-            name="Hostel Details"
-            options={{
-              headerTitle: "Hostel Details",
-              headerTitleAlign: "center",
-              headerTitleStyle: headerTitle,
-            }}
-            component={HostelDetails}
-          />
-          <Stack.Screen
-            name="Register Hostel"
-            options={{
-              headerTitle: "Regisration",
-              headerTitleAlign: "center",
-              headerTitleStyle: headerTitle,
-            }}
-            component={Register}
           />
         </>
       )}
