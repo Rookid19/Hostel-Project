@@ -7,6 +7,7 @@ export const Colors = {
   pink: "#F9E8FF",
   gray: "#707070",
   lighterGray: "#f5f7f9",
+  lightBorder: "#e2e2e2",
   blackishBlue: "#353765",
   lightBlue: "#1e86ff",
   pinkishRed: "#f23e75",

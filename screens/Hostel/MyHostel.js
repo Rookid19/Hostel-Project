@@ -1,16 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../../firebase";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-} from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query } from "firebase/firestore";
+import { FontAwesome } from "@expo/vector-icons";
+import { Colors } from "../../utils/styles";
+import { FlatList } from "react-native-gesture-handler";
 
 const MyHostel = ({ navigation }) => {
   const [hostel, setHostel] = useState([]);
@@ -49,19 +51,42 @@ const MyHostel = ({ navigation }) => {
     fectchHostelUser();
   }, []);
 
-
-  console.log("hostels---> " + hostel);
+  console.log("hostels---> " + JSON.stringify(hostel));
 
   return (
     <SafeAreaView>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Ionicons
-          name="ios-chevron-back-outline"
-          size={40}
-          color="black"
-          style={styles.icon}
-        />
-      </TouchableOpacity>
+      {hostel.length == 0 ? (
+        <ActivityIndicator style={{ marginTop: 50 }} size="large" />
+      ) : (
+        <>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons
+              name="ios-chevron-back-outline"
+              size={40}
+              color="black"
+              style={styles.icon}
+            />
+            <Text style={styles.header}>Sterner hostel</Text>
+          </TouchableOpacity>
+          <FlatList
+            data={hostel}
+            renderItem={({ item }) => (
+              <TouchableOpacity style={styles.listComponent}>
+                <FontAwesome
+                  name="user-circle"
+                  size={50}
+                  color={Colors.lightBorder}
+                  style={styles.icon}
+                />
+                <View>
+                  <Text style={styles.name}>{item.data.firstName}</Text>
+                  <Text style={styles.subTitle}>My name is barry allen</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -70,6 +95,32 @@ export default MyHostel;
 
 const styles = StyleSheet.create({
   icon: {
-    marginLeft: 10,
+    marginLeft: 15,
+    marginRight: 20,
+  },
+  listComponent: {
+    flexDirection: "row",
+    // backgroundColor: Colors.bg,
+    marginVertical: 5,
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderBottomColor:Colors.lightBorder
+  },
+  name: {
+    fontFamily: "Medium",
+    fontSize: 20,
+    marginTop: 5,
+  },
+  subTitle: {
+    marginTop: 5,
+    fontSize: 16,
+    fontFamily: "Regular",
+  },
+  header: {
+    textAlign: "center",
+    fontFamily: "Bold",
+    fontSize: 22,
+    marginTop: -25,
+    marginBottom: 15,
   },
 });
