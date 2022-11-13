@@ -12,10 +12,11 @@ import Animated from "react-native-reanimated";
 import BottomSheet from "reanimated-bottom-sheet";
 import { Text } from "react-native";
 import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
   const [sheetHeight, setSheetHeight] = useState(300);
   const [bottomSheetId, setBottomSheetId] = useState(null);
   const [loadingInitial, setLoadingInitial] = useState(true);
+  const [hostelsData, setHostelsData] = useState([]);
 
   //open bottom sheet
   const openSheet = (id, height) => {
@@ -92,35 +94,59 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  //sign out
+  const userSignOut = () => {
+    signOut(auth)
+      //  .then(() => {
+      //     navigation.navigate("Welcome");
+      //  })
+      .catch((error) => alert(error.message));
+    // .finally(() => setSignOutLoading(<ButtonText>Sign Out</ButtonText>));
+  };
+
   //Checks if there is a user Logged In
-  useEffect(() => {
-    onAuthStateChanged(
-      auth,
-      (user) => {
+  useEffect(
+    () =>
+      onAuthStateChanged(auth, (user) => {
         if (user) {
           // navigation.navigate("Enter Passcode");
           setUser(user);
         } else {
-          setUser(false);
+          setUser(null);
+          // navigation.navigate("Welcome")
           // alert("no user");
+          // setLoadingInitial(false);
         }
-        // setLoadingInitial(false);
-      },
-      [user]
-    );
-  }, [user]);
+        setLoadingInitial(false);
+      }),
+
+    []
+  );
+
+  // useEffect(() => {
+  //   const unsub = onSnapshot(collection(db, "Admin"), (snapshot) => {
+  //     setHostelsData(
+  //       snapshot.docs.map((doc) => ({
+  //         data: doc.data(),
+  //       }))
+  //     );
+  //   });
+
+  //   return unsub;
+  // }, []);
 
   // allows you to memoize expensive functions so that you can avoid calling them on every render
   const memoVaue = useMemo(
     () => ({
       user,
+      setUser,
       bs,
       fall,
       openSheet,
       closeSheet,
-      signUp,
+      userSignOut,
     }),
-    [user, setUser, openSheet, closeSheet, signUp, bs]
+    [user, openSheet, closeSheet, bs]
   );
 
   //Checks if there is a user Logged In

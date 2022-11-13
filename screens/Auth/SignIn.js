@@ -5,11 +5,12 @@ import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import LottieView from "lottie-react-native";
-
+import useAuth from "../../hooks/useAuth";
 
 const SignIn = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { setUser, user } = useAuth();
+  const [email, setEmail] = useState("Randy@gmail.com");
+  const [password, setPassword] = useState("Randy@123");
   const [hidePassword, setHidePassword] = useState(true);
   const [loading, setLoading] = useState(
     <StyledButtonText>Submit</StyledButtonText>
@@ -27,12 +28,17 @@ const SignIn = ({ navigation }) => {
         autoPlay
         speed={1}
       />;
-      signInWithEmailAndPassword(auth, email, password).catch((error) => {
-        alert(error.message);
-        setLoading(
-          <StyledButtonText style={styles.regular}>Submit</StyledButtonText>
-        );
-      });
+      signInWithEmailAndPassword(auth, email, password)
+        .then((res) => {
+          console.log(res)
+          setUser(true);
+        })
+        .catch((error) => {
+          alert(error.message);
+          setLoading(
+            <StyledButtonText style={styles.regular}>Submit</StyledButtonText>
+          );
+        });
     }
   };
 

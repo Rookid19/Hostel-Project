@@ -32,6 +32,7 @@ const StackNavigator = () => {
 
   //useAuth Hook
   const { user } = useAuth();
+  // const user = false
 
   // handles all routing in the app
   const Stack = createNativeStackNavigator();
@@ -88,11 +89,11 @@ const StackNavigator = () => {
             options={{ headerShown: false }}
             component={Admin}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Dashboard"
             options={{ headerShown: false }}
             component={Dashboard}
-          />
+          /> */}
           <Stack.Screen
             name="Hostel Details"
             options={{

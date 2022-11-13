@@ -2,18 +2,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "../../utils/styles";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
+import useAuth from "../../hooks/useAuth";
 
 const Profile = () => {
-  const userSignOut = () => {
-    signOut(auth)
-      //  .then(() => {
-      //     navigation.navigate("Welcome");
-      //  })
-      .catch((error) => alert(error.message));
-    // .finally(() => setSignOutLoading(<ButtonText>Sign Out</ButtonText>));
-  };
+  const { userSignOut } = useAuth();
 
   return (
     <View style={styles.container}>
