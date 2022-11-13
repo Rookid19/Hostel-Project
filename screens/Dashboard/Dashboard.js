@@ -6,8 +6,10 @@ import { FlatList } from "react-native-gesture-handler";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { auth } from "../../firebase";
+import useAuth from "../../hooks/useAuth";
 
 const Dashboard = ({ navigation }) => {
+  const { hostelsData } = useAuth();
   const image =
     "https://cdn.dribbble.com/userupload/3677390/file/original-f57fd4cc963537fdbb5b7089ba598620.png?compress=1&resize=400x300&vertical=top";
   const popularHostel = [
@@ -85,13 +87,17 @@ const Dashboard = ({ navigation }) => {
             </View>
 
             <FlatList
-              data={popularHostel}
+              data={hostelsData}
               showsHorizontalScrollIndicator={false}
               style={{ paddingLeft: 20 }}
               horizontal
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View style={styles.itemWrapper}>
-                  <Image source={{ uri: item.img }} style={styles.image} />
+                  <Image
+                    source={{ uri: item.data.image }}
+                    style={styles.image}
+                  />
                   <View style={styles.row}>
                     <View
                       style={{
@@ -100,14 +106,17 @@ const Dashboard = ({ navigation }) => {
                         flex: 0.85,
                       }}
                     >
-                      <Text style={styles.subTitle}>Ayensu Plaza dsfsdfa</Text>
+                      <Text style={styles.subTitle}>{item.data.name}</Text>
                       <View style={[styles.row1]}>
                         <Ionicons
                           name="location-outline"
                           size={13}
                           color={Colors.gray}
+                          style={{ marginTop: 2 }}
                         />
-                        <Text style={styles.location}>Kwraprow</Text>
+                        <Text style={styles.location}>
+                          {item.data.location}
+                        </Text>
                       </View>
                     </View>
                     <View
@@ -131,14 +140,13 @@ const Dashboard = ({ navigation }) => {
                   </View>
                 </View>
               )}
-              bot
             />
           </>
         }
-        data={popularHostel}
+        data={hostelsData}
         renderItem={({ item }) => (
           <>
-            {item.id == "1" && (
+            {item.id != "1" && (
               <Text style={[styles.title, { marginTop: 30, marginBottom: 5 }]}>
                 Find your hostel
               </Text>
@@ -147,31 +155,31 @@ const Dashboard = ({ navigation }) => {
               style={styles.itemContainer}
               onPress={() =>
                 navigation.navigate("Hostel Details", {
-                  img: item.img,
-                  location: item.location,
-                  name: item.name,
-                  fees: item.fees,
+                  img: item?.data?.image,
+                  location: item?.date?.location,
+                  name: item?.data?.name,
+                  fees: item?.data?.fees,
                   vacancy: true,
-                  description: item.description,
+                  description: item?.data?.description,
                 })
               }
             >
-              <Image source={{ uri: item.img }} style={styles.image2} />
+              <Image source={{ uri: item?.data?.image }} style={styles.image2} />
               <View style={styles.card}>
-                <Text style={styles.subTitle}>Ayensu Plaza dsfsdfa jhkj</Text>
+                <Text style={styles.subTitle}>{item?.data?.name}</Text>
                 <View style={[styles.row1, { marginTop: 5 }]}>
                   <Ionicons
                     name="location-outline"
                     size={13}
                     color={Colors.gray}
                   />
-                  <Text style={styles.location}>Kwraprow</Text>
+                  <Text style={styles.location}>{item?.data?.location}</Text>
                 </View>
                 <View
                   style={[styles.row1, { justifyContent: "space-between" }]}
                 >
-                  <Text style={styles.subTitle}>GHS 3000</Text>
-                  <Text style={styles.room}>Room Available</Text>
+                  <Text style={styles.subTitle}>GHS {item?.data?.fees}</Text>
+                  <Text style={styles.room}>{item?.data?.status}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -274,11 +282,12 @@ const styles = StyleSheet.create({
     fontFamily: "Regular",
     color: Colors.gray,
     fontSize: 13,
+    marginTop: 4,
   },
   rating: {
     fontFamily: "Bold",
     fontSize: 11,
-    // marginTop: 11,
+    marginTop: 4,
     color: Colors.blackishBlue,
     // marginLeft: -10,
   },

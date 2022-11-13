@@ -12,7 +12,14 @@ import Animated from "react-native-reanimated";
 import BottomSheet from "reanimated-bottom-sheet";
 import { Text } from "react-native";
 import { auth, db } from "../firebase";
-import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -123,17 +130,23 @@ export const AuthProvider = ({ children }) => {
     []
   );
 
-  // useEffect(() => {
-  //   const unsub = onSnapshot(collection(db, "Admin"), (snapshot) => {
-  //     setHostelsData(
-  //       snapshot.docs.map((doc) => ({
-  //         data: doc.data(),
-  //       }))
-  //     );
-  //   });
+  useEffect(
+    () =>
+      onSnapshot(
+        query(collection(db, "Admin", "hostels", "info")),
+        (snapshot) => {
+          setHostelsData(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              data: doc.data(),
+            }))
+          );
+        }
+      ),
+    []
+  );
 
-  //   return unsub;
-  // }, []);
+  // console.log("hostel data--- > " + hostelsData[0].data?.name);
 
   // allows you to memoize expensive functions so that you can avoid calling them on every render
   const memoVaue = useMemo(
@@ -145,8 +158,9 @@ export const AuthProvider = ({ children }) => {
       openSheet,
       closeSheet,
       userSignOut,
+      hostelsData,
     }),
-    [user, openSheet, closeSheet, bs]
+    [user, openSheet, closeSheet, bs, hostelsData]
   );
 
   //Checks if there is a user Logged In

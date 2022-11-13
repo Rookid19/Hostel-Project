@@ -9,8 +9,8 @@ import useAuth from "../../hooks/useAuth";
 
 const SignIn = ({ navigation }) => {
   const { setUser, user } = useAuth();
-  const [email, setEmail] = useState("Randy@gmail.com");
-  const [password, setPassword] = useState("Randy@123");
+  const [email, setEmail] = useState("Admin@gmail.com");
+  const [password, setPassword] = useState("Admin@123");
   const [hidePassword, setHidePassword] = useState(true);
   const [loading, setLoading] = useState(
     <StyledButtonText>Submit</StyledButtonText>

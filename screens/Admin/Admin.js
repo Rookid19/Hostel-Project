@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { CustomModal } from "../../components/CustomModal";
 import { Ionicons } from "@expo/vector-icons";
-import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import LottieView from "lottie-react-native";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -98,20 +98,14 @@ const Admin = () => {
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("download url --- > " + downloadURL);
-          setDoc(
-            doc(db, "Admin", "hostels", name, "info"),
-            {
-              name,
-              location,
-              fees,
-              description,
-              status,
-              image: downloadURL,
-            },
-            {
-              merge: true,
-            }
-          ).catch((error) => alert(error.message));
+          addDoc(collection(db, "Admin", "hostels","info"), {
+            name,
+            location,
+            fees,
+            description,
+            status,
+            image: downloadURL,
+          }).catch((error) => alert(error.message));
           setLoading(<StyledButtonText>Submit</StyledButtonText>);
           setName("");
           setLocation("");
