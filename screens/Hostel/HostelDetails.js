@@ -42,7 +42,7 @@ const HostelDetails = ({ navigation, route }) => {
                 {vacancy ? "Room Available" : "Full"}
               </Text>
             </View>
-            <Text style={styles.fees}>GHS {fees.toFixed(2)}</Text>
+            <Text style={styles.fees}>GHS {parseFloat(fees).toFixed(2)}</Text>
           </View>
         </View>
         {/* Description section */}

@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FlatList } from "react-native-gesture-handler";
@@ -10,50 +10,28 @@ import useAuth from "../../hooks/useAuth";
 
 const Dashboard = ({ navigation }) => {
   const { hostelsData } = useAuth();
-  const image =
-    "https://cdn.dribbble.com/userupload/3677390/file/original-f57fd4cc963537fdbb5b7089ba598620.png?compress=1&resize=400x300&vertical=top";
-  const popularHostel = [
-    {
-      id: "1",
-      img: image,
-      location: "Ayensu",
-      name: "Ayensu Plaza",
-      fees: 3000,
-      vacancy: true,
-      description:
-        "My name is barry allen and i am the fastest man alive How to damage your file so that no one can open it. Actual: you have not done your homework, and the teacher is waiting for the finished work. Or the project is not ready, and the boss is waiting for completion. To make excuses to a person, there is a simple and proven way — to damage the file so that the recipient does not open it. The free site Corrupt a file (http://corrupt-a-file.net/) is designed with this purpose in mind. Plausibly name any file, send it to the site and wait a couple of seconds — the service will return an already damaged document. If you try to open the file, a technical error will pop up. Download the received file or instantly send it to the cloud storage — and you're done!",
-    },
-    {
-      id: "2",
-      img: image,
-      location: "Ayensu",
-      name: "Ayensu Plaza",
-      fees: 3000,
-      vacancy: true,
-      description:
-        "My name is barry allen and i am the fastest man alive How to damage your file so that no one can open it. Actual: you have not done your homework, and the teacher is waiting for the finished work. Or the project is not ready, and the boss is waiting for completion. To make excuses to a person, there is a simple and proven way — to damage the file so that the recipient does not open it. The free site Corrupt a file (http://corrupt-a-file.net/) is designed with this purpose in mind. Plausibly name any file, send it to the site and wait a couple of seconds — the service will return an already damaged document. If you try to open the file, a technical error will pop up. Download the received file or instantly send it to the cloud storage — and you're done!",
-    },
-    {
-      id: "3",
-      img: image,
-      location: "Ayensu",
-      name: "Ayensu Plaza",
-      fees: 3000,
-      vacancy: true,
-      description:
-        "My name is barry allen and i am the fastest man alive How to damage your file so that no one can open it. Actual: you have not done your homework, and the teacher is waiting for the finished work. Or the project is not ready, and the boss is waiting for completion. To make excuses to a person, there is a simple and proven way — to damage the file so that the recipient does not open it. The free site Corrupt a file (http://corrupt-a-file.net/) is designed with this purpose in mind. Plausibly name any file, send it to the site and wait a couple of seconds — the service will return an already damaged document. If you try to open the file, a technical error will pop up. Download the received file or instantly send it to the cloud storage — and you're done!",
-    },
-    {
-      id: "4",
-      img: image,
-      location: "Ayensu",
-      name: "Ayensu Plaza",
-      fees: 3000,
-      vacancy: true,
-      description:
-        "My name is barry allen and i am the fastest man alive How to damage your file so that no one can open it. Actual: you have not done your homework, and the teacher is waiting for the finished work. Or the project is not ready, and the boss is waiting for completion. To make excuses to a person, there is a simple and proven way — to damage the file so that the recipient does not open it. The free site Corrupt a file (http://corrupt-a-file.net/) is designed with this purpose in mind. Plausibly name any file, send it to the site and wait a couple of seconds — the service will return an already damaged document. If you try to open the file, a technical error will pop up. Download the received file or instantly send it to the cloud storage — and you're done!",
-    },
-  ];
+  const [filteredDataSource, setFilteredDataSource] = useState(hostelsData);
+
+  // Searh Functionality
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the stocksData and update FilteredDataSource
+      const newData = hostelsData?.filter(({ name }) => {
+        // Applying filter for the inserted text in search bar
+        const itemData = sector ? sector.toUpperCase() : "".toUpperCase();
+
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      setFilteredDataSource(hostelsData);
+      setSearch(text);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -87,7 +65,7 @@ const Dashboard = ({ navigation }) => {
             </View>
 
             <FlatList
-              data={hostelsData}
+              data={hostelsData.slice(0, 5)}
               showsHorizontalScrollIndicator={false}
               style={{ paddingLeft: 20 }}
               horizontal
@@ -95,7 +73,7 @@ const Dashboard = ({ navigation }) => {
               renderItem={({ item }) => (
                 <View style={styles.itemWrapper}>
                   <Image
-                    source={{ uri: item.data.image }}
+                    source={{ uri: item?.data?.image }}
                     style={styles.image}
                   />
                   <View style={styles.row}>
@@ -106,7 +84,7 @@ const Dashboard = ({ navigation }) => {
                         flex: 0.85,
                       }}
                     >
-                      <Text style={styles.subTitle}>{item.data.name}</Text>
+                      <Text style={styles.subTitle}>{item?.data?.name}</Text>
                       <View style={[styles.row1]}>
                         <Ionicons
                           name="location-outline"
@@ -115,7 +93,7 @@ const Dashboard = ({ navigation }) => {
                           style={{ marginTop: 2 }}
                         />
                         <Text style={styles.location}>
-                          {item.data.location}
+                          {item?.data?.location}
                         </Text>
                       </View>
                     </View>
@@ -144,9 +122,11 @@ const Dashboard = ({ navigation }) => {
           </>
         }
         data={hostelsData}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <>
-            {item.id != "1" && (
+            {item.id == hostelsData[0].id && (
               <Text style={[styles.title, { marginTop: 30, marginBottom: 5 }]}>
                 Find your hostel
               </Text>
@@ -156,7 +136,7 @@ const Dashboard = ({ navigation }) => {
               onPress={() =>
                 navigation.navigate("Hostel Details", {
                   img: item?.data?.image,
-                  location: item?.date?.location,
+                  location: item?.data?.location,
                   name: item?.data?.name,
                   fees: item?.data?.fees,
                   vacancy: true,
@@ -164,7 +144,10 @@ const Dashboard = ({ navigation }) => {
                 })
               }
             >
-              <Image source={{ uri: item?.data?.image }} style={styles.image2} />
+              <Image
+                source={{ uri: item?.data?.image }}
+                style={styles.image2}
+              />
               <View style={styles.card}>
                 <Text style={styles.subTitle}>{item?.data?.name}</Text>
                 <View style={[styles.row1, { marginTop: 5 }]}>
