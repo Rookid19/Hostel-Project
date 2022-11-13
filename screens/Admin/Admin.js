@@ -1,6 +1,6 @@
 import {
   ScrollView,
-  StyleSheet,
+  StyleSheet, 
   Text,
   TouchableOpacity,
   Image,

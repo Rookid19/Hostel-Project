@@ -10,6 +10,7 @@ import Admin from "../screens/Admin/Admin";
 import HostelDetails from "../screens/Hostel/HostelDetails";
 import Register from "../screens/Hostel/Register";
 import Profile from "../screens/Auth/Profile";
+import MyHostel from "../screens/Hostel/MyHostel";
 
 const StackNavigator = () => {
   //screen options
@@ -60,10 +61,8 @@ const StackNavigator = () => {
           />
           <Stack.Screen
             name="My Hostel"
-            options={{
-              header: false,
-            }}
-            component={Profile}
+            options={{ headerShown: false }}
+            component={MyHostel}
           />
           <Stack.Screen
             name="Hostel Details"

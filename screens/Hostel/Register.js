@@ -6,7 +6,7 @@ import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import LottieView from "lottie-react-native";
 
-const Register = ({ route }) => {
+const Register = ({ route, navigation }) => {
   const [hostelName] = useState(route?.params?.name);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -53,6 +53,7 @@ const Register = ({ route }) => {
         guardianContact,
       }
     ).catch((error) => alert(error.message));
+    navigation.navigate("My Hostel");
     setLoading(<StyledButtonText>Register</StyledButtonText>);
   };
   return (

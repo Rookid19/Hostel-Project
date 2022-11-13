@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
@@ -34,149 +41,155 @@ const Dashboard = ({ navigation }) => {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Ionicons
-          name="home-outline"
-          size={30}
-          color={Colors.blackishBlue}
-          style={styles.icon}
-        />
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Feather
-            name="user"
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <SafeAreaView>
+        <View style={styles.header}>
+          <Ionicons
+            name="home-outline"
             size={30}
             color={Colors.blackishBlue}
             style={styles.icon}
           />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.name}>Hi {auth?.currentUser?.displayName}</Text>
-      <Text style={styles.title}>Find your hostel</Text>
-      <CustomTextInput
-        search={true}
-        icon="search"
-        onChangeText={(text) => searchFilterFunction(text)}
-      />
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <Feather
+              name="user"
+              size={30}
+              color={Colors.blackishBlue}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.name}>Hi {auth?.currentUser?.displayName}</Text>
+        <Text style={styles.title}>Find your hostel</Text>
+        <CustomTextInput
+          search={true}
+          icon="search"
+          onChangeText={(text) => searchFilterFunction(text)}
+        />
 
-      <FlatList
-        ListHeaderComponent={
-          <>
-            <View style={styles.row}>
-              <Text style={[styles.title, styles.popularText]}>
-                Popular Hostels
-              </Text>
-              <TouchableOpacity onPress={() => navigation.navigate("My Hostel")}>
-                <Text style={styles.smallText}>My hostel</Text>
-              </TouchableOpacity>
-            </View>
+        <FlatList
+          ListHeaderComponent={
+            <>
+              <View style={styles.row}>
+                <Text style={[styles.title, styles.popularText]}>
+                  Popular Hostels
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("My Hostel")}
+                >
+                  <Text style={styles.smallText}>My hostel</Text>
+                </TouchableOpacity>
+              </View>
 
-            <FlatList
-              data={hostelsData.slice(0, 5)}
-              showsHorizontalScrollIndicator={false}
-              style={{ paddingLeft: 20 }}
-              horizontal
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View style={styles.itemWrapper}>
-                  <Image
-                    source={{ uri: item?.data?.image }}
-                    style={styles.image}
-                  />
-                  <View style={styles.row}>
-                    <View
-                      style={{
-                        paddingHorizontal: 7,
-                        marginRight: 2,
-                        flex: 0.85,
-                      }}
-                    >
-                      <Text style={styles.subTitle}>{item?.data?.name}</Text>
-                      <View style={[styles.row1]}>
+              <FlatList
+                data={hostelsData.slice(0, 5)}
+                showsHorizontalScrollIndicator={false}
+                style={{ paddingLeft: 20 }}
+                horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <View style={styles.itemWrapper}>
+                    <Image
+                      source={{ uri: item?.data?.image }}
+                      style={styles.image}
+                    />
+                    <View style={styles.row}>
+                      <View
+                        style={{
+                          paddingHorizontal: 7,
+                          marginRight: 2,
+                          flex: 0.85,
+                        }}
+                      >
+                        <Text style={styles.subTitle}>{item?.data?.name}</Text>
+                        <View style={[styles.row1]}>
+                          <Ionicons
+                            name="location-outline"
+                            size={13}
+                            color={Colors.gray}
+                            style={{ marginTop: 2 }}
+                          />
+                          <Text style={styles.location}>
+                            {item?.data?.location}
+                          </Text>
+                        </View>
+                      </View>
+                      <View
+                        style={[
+                          styles.row1,
+                          {
+                            alignSelf: "center",
+                            marginRight: 5,
+                            marginTop: 12,
+                          },
+                        ]}
+                      >
                         <Ionicons
-                          name="location-outline"
+                          name="star"
                           size={13}
-                          color={Colors.gray}
-                          style={{ marginTop: 2 }}
+                          color={Colors.pinkishRed}
+                          style={styles.star}
                         />
-                        <Text style={styles.location}>
-                          {item?.data?.location}
-                        </Text>
+                        <Text style={styles.rating}>4.8</Text>
                       </View>
                     </View>
-                    <View
-                      style={[
-                        styles.row1,
-                        {
-                          alignSelf: "center",
-                          marginRight: 5,
-                          marginTop: 12,
-                        },
-                      ]}
-                    >
-                      <Ionicons
-                        name="star"
-                        size={13}
-                        color={Colors.pinkishRed}
-                        style={styles.star}
-                      />
-                      <Text style={styles.rating}>4.8</Text>
-                    </View>
+                  </View>
+                )}
+              />
+            </>
+          }
+          data={filteredDataSource}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <>
+              {item.id == hostelsData[0].id && (
+                <Text
+                  style={[styles.title, { marginTop: 30, marginBottom: 5 }]}
+                >
+                  Find your hostel
+                </Text>
+              )}
+              <TouchableOpacity
+                style={styles.itemContainer}
+                onPress={() =>
+                  navigation.navigate("Hostel Details", {
+                    img: item?.data?.image,
+                    location: item?.data?.location,
+                    name: item?.data?.name,
+                    fees: item?.data?.fees,
+                    vacancy: true,
+                    description: item?.data?.description,
+                  })
+                }
+              >
+                <Image
+                  source={{ uri: item?.data?.image }}
+                  style={styles.image2}
+                />
+                <View style={styles.card}>
+                  <Text style={styles.subTitle}>{item?.data?.name}</Text>
+                  <View style={[styles.row1, { marginTop: 5 }]}>
+                    <Ionicons
+                      name="location-outline"
+                      size={13}
+                      color={Colors.gray}
+                    />
+                    <Text style={styles.location}>{item?.data?.location}</Text>
+                  </View>
+                  <View
+                    style={[styles.row1, { justifyContent: "space-between" }]}
+                  >
+                    <Text style={styles.subTitle}>GHS {item?.data?.fees}</Text>
+                    <Text style={styles.room}>{item?.data?.status}</Text>
                   </View>
                 </View>
-              )}
-            />
-          </>
-        }
-        data={filteredDataSource}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <>
-            {item.id == hostelsData[0].id && (
-              <Text style={[styles.title, { marginTop: 30, marginBottom: 5 }]}>
-                Find your hostel
-              </Text>
-            )}
-            <TouchableOpacity
-              style={styles.itemContainer}
-              onPress={() =>
-                navigation.navigate("Hostel Details", {
-                  img: item?.data?.image,
-                  location: item?.data?.location,
-                  name: item?.data?.name,
-                  fees: item?.data?.fees,
-                  vacancy: true,
-                  description: item?.data?.description,
-                })
-              }
-            >
-              <Image
-                source={{ uri: item?.data?.image }}
-                style={styles.image2}
-              />
-              <View style={styles.card}>
-                <Text style={styles.subTitle}>{item?.data?.name}</Text>
-                <View style={[styles.row1, { marginTop: 5 }]}>
-                  <Ionicons
-                    name="location-outline"
-                    size={13}
-                    color={Colors.gray}
-                  />
-                  <Text style={styles.location}>{item?.data?.location}</Text>
-                </View>
-                <View
-                  style={[styles.row1, { justifyContent: "space-between" }]}
-                >
-                  <Text style={styles.subTitle}>GHS {item?.data?.fees}</Text>
-                  <Text style={styles.room}>{item?.data?.status}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </>
-        )}
-      />
-    </SafeAreaView>
+              </TouchableOpacity>
+            </>
+          )}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
