@@ -11,6 +11,7 @@ import useAuth from "../../hooks/useAuth";
 const Dashboard = ({ navigation }) => {
   const { hostelsData } = useAuth();
   const [filteredDataSource, setFilteredDataSource] = useState(hostelsData);
+  const [search, setSearch] = useState("");
 
   // Searh Functionality
   const searchFilterFunction = (text) => {
@@ -18,9 +19,9 @@ const Dashboard = ({ navigation }) => {
     if (text) {
       // Inserted text is not blank
       // Filter the stocksData and update FilteredDataSource
-      const newData = hostelsData?.filter(({ name }) => {
+      const newData = hostelsData?.filter(({ data }) => {
         // Applying filter for the inserted text in search bar
-        const itemData = sector ? sector.toUpperCase() : "".toUpperCase();
+        const itemData = data.name ? data.name.toUpperCase() : "".toUpperCase();
 
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -52,7 +53,11 @@ const Dashboard = ({ navigation }) => {
       </View>
       <Text style={styles.name}>Hi {auth?.currentUser?.displayName}</Text>
       <Text style={styles.title}>Find your hostel</Text>
-      <CustomTextInput search={true} icon="search" />
+      <CustomTextInput
+        search={true}
+        icon="search"
+        onChangeText={(text) => searchFilterFunction(text)}
+      />
 
       <FlatList
         ListHeaderComponent={
@@ -121,7 +126,7 @@ const Dashboard = ({ navigation }) => {
             />
           </>
         }
-        data={hostelsData}
+        data={filteredDataSource}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
