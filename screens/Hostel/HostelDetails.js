@@ -19,7 +19,6 @@ const HostelDetails = ({ navigation, route }) => {
   const [description] = useState(route?.params?.description);
   const [aboutEllipse, setAboutEllipse] = useState(4);
 
-
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -66,7 +65,11 @@ const HostelDetails = ({ navigation, route }) => {
         </View>
         <StyledButton
           style={styles.button}
-          onPress={() => navigation.navigate("Register Hostel")}
+          onPress={() =>
+            navigation.navigate("Register Hostel", {
+              name,
+            })
+          }
         >
           <StyledButtonText>Book Now</StyledButtonText>
         </StyledButton>

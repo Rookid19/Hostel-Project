@@ -4,13 +4,13 @@ import { getStorage } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDYyobvnbHSkLlJx7CcFeAui8iS3RZ4NNk",
-  authDomain: "hostel-app-53435.firebaseapp.com",
-  projectId: "hostel-app-53435",
-  storageBucket: "hostel-app-53435.appspot.com",
-  messagingSenderId: "702447907551",
-  appId: "1:702447907551:web:b65a86f353d74b68faef6a",
-  measurementId: "G-YB0D0M58Q2",
+  apiKey: "AIzaSyD8mf2SCz4shdcSXnypZNYnVav-cSx42zc",
+  authDomain: "hostel-app-bb0da.firebaseapp.com",
+  projectId: "hostel-app-bb0da",
+  storageBucket: "hostel-app-bb0da.appspot.com",
+  messagingSenderId: "326372646202",
+  appId: "1:326372646202:web:26df0caf46d6eaa0170403",
+  measurementId: "G-JPSPLL119Q"
 };
 
 const app = initializeApp(firebaseConfig);

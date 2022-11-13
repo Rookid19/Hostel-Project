@@ -28,17 +28,12 @@ const SignIn = ({ navigation }) => {
         autoPlay
         speed={1}
       />;
-      signInWithEmailAndPassword(auth, email, password)
-        .then((res) => {
-          console.log(res)
-          setUser(true);
-        })
-        .catch((error) => {
-          alert(error.message);
-          setLoading(
-            <StyledButtonText style={styles.regular}>Submit</StyledButtonText>
-          );
-        });
+      signInWithEmailAndPassword(auth, email, password).catch((error) => {
+        alert(error.message);
+        setLoading(
+          <StyledButtonText style={styles.regular}>Submit</StyledButtonText>
+        );
+      });
     }
   };
 

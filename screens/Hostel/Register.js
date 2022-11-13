@@ -2,10 +2,11 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
-import { addDoc, collection, setDoc } from "firebase/firestore";
-import { auth } from "../../firebase";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import LottieView from "lottie-react-native";
 
-const Register = ({route}) => {
+const Register = ({ route }) => {
   const [hostelName] = useState(route?.params?.name);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -15,20 +16,31 @@ const Register = ({route}) => {
   const [level, setLevel] = useState("");
   const [guardianName, setGuardianName] = useState("");
   const [guardianContact, setGuardianContact] = useState("");
+  const [loading, setLoading] = useState(
+    <StyledButtonText>Register</StyledButtonText>
+  );
 
-  const valid =
-    firstName != "" &&
-    lastName != "" &&
-    studentId != "" &&
-    contact != "" &&
-    program &&
-    level != "" &&
-    guardianName != "" &&
-    guardianContact != "";
+  const valid = firstName != "";
+  // &&
+  // lastName != "" &&
+  // studentId != "" &&
+  // contact != "" &&
+  // program &&
+  // level != "" &&
+  // guardianName != "" &&
+  // guardianContact != "";
 
   const submit = async () => {
+    setLoading(
+      <LottieView
+        source={require("../../assets/animation/activityIndicator.json")}
+        style={styles.lottieView}
+        autoPlay
+        speed={1}
+      />
+    );
     setDoc(
-      doc(db, "UserInfo", "hostels", hostelName, auth?.currentUser?.email),
+      doc(db, "Admin", "usersHostels", hostelName, auth?.currentUser?.email),
       {
         hostelName,
         firstName,
@@ -41,7 +53,7 @@ const Register = ({route}) => {
         guardianContact,
       }
     ).catch((error) => alert(error.message));
-    setLoading(<StyledButtonText>Submit</StyledButtonText>);
+    setLoading(<StyledButtonText>Register</StyledButtonText>);
   };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -94,8 +106,8 @@ const Register = ({route}) => {
         onChangeText={(text) => setGuardianContact(text)}
         value={guardianContact}
       />
-      <StyledButton style={styles.button} disabled={!valid}>
-        <StyledButtonText>Register</StyledButtonText>
+      <StyledButton style={styles.button} disabled={!valid} onPress={submit}>
+        {loading}
       </StyledButton>
     </ScrollView>
   );
@@ -111,5 +123,9 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 40,
     marginTop: 20,
+  },
+  lottieView: {
+    height: 25,
+    alignSelf: "center",
   },
 });

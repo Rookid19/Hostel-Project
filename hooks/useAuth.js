@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
           setDoc(doc(db, "UserInfo", email, "Profile", "Details"), {
             firstName,
             lastName,
-            email,
+            email: email.toLowerCase(),
             level,
             password,
             payment: false,
@@ -103,12 +103,7 @@ export const AuthProvider = ({ children }) => {
 
   //sign out
   const userSignOut = () => {
-    signOut(auth)
-      //  .then(() => {
-      //     navigation.navigate("Welcome");
-      //  })
-      .catch((error) => alert(error.message));
-    // .finally(() => setSignOutLoading(<ButtonText>Sign Out</ButtonText>));
+    signOut(auth).catch((error) => alert(error.message));
   };
 
   //Checks if there is a user Logged In
@@ -116,13 +111,9 @@ export const AuthProvider = ({ children }) => {
     () =>
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          // navigation.navigate("Enter Passcode");
           setUser(user);
         } else {
           setUser(null);
-          // navigation.navigate("Welcome")
-          // alert("no user");
-          // setLoadingInitial(false);
         }
         setLoadingInitial(false);
       }),
