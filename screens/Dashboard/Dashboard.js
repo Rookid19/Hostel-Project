@@ -66,7 +66,9 @@ const Dashboard = ({ navigation }) => {
               <Text style={[styles.title, styles.popularText]}>
                 Popular Hostels
               </Text>
-              <Text style={styles.smallText}>My hostel</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("My Hostel")}>
+                <Text style={styles.smallText}>My hostel</Text>
+              </TouchableOpacity>
             </View>
 
             <FlatList

@@ -137,7 +137,6 @@ export const AuthProvider = ({ children }) => {
     []
   );
 
-  // console.log("hostel data--- > " + hostelsData[0].data?.name);
 
   // allows you to memoize expensive functions so that you can avoid calling them on every render
   const memoVaue = useMemo(
@@ -146,6 +145,7 @@ export const AuthProvider = ({ children }) => {
       setUser,
       bs,
       fall,
+      signUp,
       openSheet,
       closeSheet,
       userSignOut,

@@ -59,6 +59,13 @@ const StackNavigator = () => {
             component={Profile}
           />
           <Stack.Screen
+            name="My Hostel"
+            options={{
+              header: false,
+            }}
+            component={Profile}
+          />
+          <Stack.Screen
             name="Hostel Details"
             options={{
               headerTitle: "Hostel Details",
