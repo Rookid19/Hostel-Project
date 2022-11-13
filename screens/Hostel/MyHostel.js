@@ -14,7 +14,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "../../utils/styles";
 import { FlatList } from "react-native-gesture-handler";
 
-const MyHostel = ({ navigation }) => {
+const MyHostel = ({ navigation, route }) => {
   const [hostel, setHostel] = useState([]);
 
   const abc = async () => {
@@ -51,7 +51,7 @@ const MyHostel = ({ navigation }) => {
     fectchHostelUser();
   }, []);
 
-  console.log("hostels---> " + JSON.stringify(hostel));
+  // console.log("hostels---> " + JSON.stringify(hostel));
 
   return (
     <SafeAreaView>
@@ -71,7 +71,12 @@ const MyHostel = ({ navigation }) => {
           <FlatList
             data={hostel}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.listComponent}>
+              <TouchableOpacity
+                style={styles.listComponent}
+                onPress={() => navigation.navigate("Chat",{
+                  chatName : item?.data?.firstName
+                })}
+              >
                 <FontAwesome
                   name="user-circle"
                   size={50}
@@ -95,16 +100,15 @@ export default MyHostel;
 
 const styles = StyleSheet.create({
   icon: {
-    marginLeft: 15,
+    marginLeft: 10,
     marginRight: 20,
   },
   listComponent: {
     flexDirection: "row",
-    // backgroundColor: Colors.bg,
     marginVertical: 5,
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor:Colors.lightBorder
+    borderBottomColor: Colors.lightBorder,
   },
   name: {
     fontFamily: "Medium",
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Bold",
     fontSize: 22,
-    marginTop: -25,
+    marginTop: -30,
     marginBottom: 15,
   },
 });

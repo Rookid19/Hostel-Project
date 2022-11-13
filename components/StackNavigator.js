@@ -11,6 +11,7 @@ import HostelDetails from "../screens/Hostel/HostelDetails";
 import Register from "../screens/Hostel/Register";
 import Profile from "../screens/Auth/Profile";
 import MyHostel from "../screens/Hostel/MyHostel";
+import Chat from "../screens/Chat/Chat";
 
 const StackNavigator = () => {
   //screen options
@@ -82,6 +83,7 @@ const StackNavigator = () => {
             }}
             component={Register}
           />
+          <Stack.Screen name="Chat" component={Chat} />
         </>
       ) : (
         <>
