@@ -19,6 +19,7 @@ const HostelDetails = ({ navigation, route }) => {
   const [description] = useState(route?.params?.description);
   const [aboutEllipse, setAboutEllipse] = useState(4);
 
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
