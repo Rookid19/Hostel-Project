@@ -21,6 +21,11 @@ const MyHostel = ({ navigation }) => {
   const [hostel, setHostel] = useState([]);
   const [hostelName, setHostelName] = useState("");
   const [info, setInfo] = useState("");
+  const filteredHostelData = hostel.filter(
+    ({ id }) => id !== auth?.currentUser?.email
+  );
+
+  console.log(hostel);
 
   const fectchHostelUser = async () => {
     let hostel_name = await AsyncStorage.getItem("my_hostel");
@@ -44,9 +49,9 @@ const MyHostel = ({ navigation }) => {
 
   useEffect(() => {
     fectchHostelUser();
-  }, [navigation]);
+  }, []);
 
-  // console.log("hostels---> " + JSON.stringify(hostel));
+
 
   return (
     <SafeAreaView>
@@ -66,7 +71,7 @@ const MyHostel = ({ navigation }) => {
             <Text style={styles.header}>{hostelName} hostel</Text>
           </TouchableOpacity>
           <FlatList
-            data={hostel}
+            data={filteredHostelData}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.listComponent}

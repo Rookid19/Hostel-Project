@@ -7,7 +7,6 @@ import { auth, db } from "../../firebase";
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const Register = ({ route, navigation }) => {
   const [hostelName] = useState(route?.params?.name);
   const [firstName, setFirstName] = useState("");
@@ -22,43 +21,49 @@ const Register = ({ route, navigation }) => {
     <StyledButtonText>Register</StyledButtonText>
   );
 
-  const valid = firstName != "";
-  // &&
-  // lastName != "" &&
-  // studentId != "" &&
-  // contact != "" &&
-  // program &&
-  // level != "" &&
-  // guardianName != "" &&
-  // guardianContact != "";
+  const valid =
+    firstName != "" &&
+    lastName != "" &&
+    studentId != "" &&
+    contact != "" &&
+    program &&
+    level != "" &&
+    guardianName != "" &&
+    guardianContact != "";
 
   const submit = async () => {
-    setLoading(
-      <LottieView
-        source={require("../../assets/animation/activityIndicator.json")}
-        style={styles.lottieView}
-        autoPlay
-        speed={1}
-      />
-    );
-    setDoc(
-      doc(db, "Admin", "usersHostels", hostelName, auth?.currentUser?.email),
-      {
-        hostelName,
-        firstName,
-        lastName,
-        studentId,
-        contact,
-        program,
-        level,
-        guardianName,
-        guardianContact,
-      }
-    ).catch((error) => alert(error.message));
-    await AsyncStorage.setItem("my_hostel", hostelName);
+    let hostel_name = await AsyncStorage.getItem("my_hostel");
 
-    navigation.navigate("My Hostel");
-    setLoading(<StyledButtonText>Register</StyledButtonText>);
+    if (hostel_name != null) {
+      alert("You cannot select more than 1 hostels");
+    } else {
+      setLoading(
+        <LottieView
+          source={require("../../assets/animation/activityIndicator.json")}
+          style={styles.lottieView}
+          autoPlay
+          speed={1}
+        />
+      );
+      setDoc(
+        doc(db, "Admin", "usersHostels", hostelName, auth?.currentUser?.email),
+        {
+          hostelName,
+          firstName,
+          lastName,
+          studentId,
+          contact,
+          program,
+          level,
+          guardianName,
+          guardianContact,
+        }
+      ).catch((error) => alert(error.message));
+      await AsyncStorage.setItem("my_hostel", hostelName);
+
+      navigation.navigate("My Hostel");
+      setLoading(<StyledButtonText>Register</StyledButtonText>);
+    }
   };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -86,6 +91,7 @@ const Register = ({ route, navigation }) => {
         icon="phone-call"
         onChangeText={(text) => setContact(text)}
         value={contact}
+        keyboardType="numeric"
       />
       <CustomTextInput
         label="Program"
@@ -98,6 +104,7 @@ const Register = ({ route, navigation }) => {
         icon="layers"
         onChangeText={(text) => setLevel(text)}
         value={level}
+        keyboardType="numeric"
       />
       <CustomTextInput
         label="Guardian Name"
@@ -110,6 +117,7 @@ const Register = ({ route, navigation }) => {
         icon="phone-call"
         onChangeText={(text) => setGuardianContact(text)}
         value={guardianContact}
+        keyboardType="numeric"
       />
       <StyledButton style={styles.button} disabled={!valid} onPress={submit}>
         {loading}
