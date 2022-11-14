@@ -7,10 +7,16 @@ import {
   View,
   KeyboardAvoidingView,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Colors } from "../../utils/styles";
 import { StatusBar } from "expo-status-bar";
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { auth, db } from "../../firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
 // import { SafeAreaView } from "react-native-safe-area-context";
 
 const Chat = ({ navigation, route }) => {
@@ -27,6 +33,18 @@ const Chat = ({ navigation, route }) => {
       ),
     });
   }, [navigation]);
+
+  const sendMessage = async () => {
+    Keyboard.dismiss();
+
+    await addDoc(collection(db, "chats", route?.params?.id, "messages"), {
+      timestamp: serverTimestamp(),
+      message: input,
+      displayName: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+    });
+    setInput("");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -35,21 +53,23 @@ const Chat = ({ navigation, route }) => {
         style={styles.container}
         keyboardVerticalOffset={90}
       >
-        <>
-          <ScrollView></ScrollView>
-          <View style={styles.footer}>
-            <TextInput
-              placeholder="Signal Message"
-              style={styles.textInput}
-              value={input}
-              onSubmitEditing={sendMessage}
-              onChangeText={(text) => setInput(text)}
-            />
-            <TouchableOpacity onPress={sendMessage} activeOpacity={0.5}>
-              <Ionicons name="send" size={24} color="#2B68E6" />
-            </TouchableOpacity>
-          </View>
-        </>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <>
+            <ScrollView></ScrollView>
+            <View style={styles.footer}>
+              <TextInput
+                placeholder="Message"
+                style={styles.textInput}
+                value={input}
+                onSubmitEditing={sendMessage}
+                onChangeText={(text) => setInput(text)}
+              />
+              <TouchableOpacity onPress={sendMessage} activeOpacity={0.5}>
+                <Ionicons name="send" size={24} color="#2B68E6" />
+              </TouchableOpacity>
+            </View>
+          </>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

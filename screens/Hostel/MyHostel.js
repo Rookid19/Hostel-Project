@@ -78,6 +78,7 @@ const MyHostel = ({ navigation }) => {
                 onPress={() =>
                   navigation.navigate("Chat", {
                     chatName: item?.data?.firstName,
+                    id: item?.id
                   })
                 }
               >
