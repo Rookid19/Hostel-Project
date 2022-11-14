@@ -38,7 +38,7 @@ const Register = ({ route, navigation }) => {
     guardianContact != "";
 
   const submit = async () => {
-    let hostel_name = await AsyncStorage.getItem("hostel");
+    let hostel_name = await AsyncStorage.getItem("hostels");
 
     if (hostel_name != null) {
       alert("You cannot select more than 1 hostels");
@@ -65,7 +65,7 @@ const Register = ({ route, navigation }) => {
           guardianContact,
         }
       ).catch((error) => alert(error.message));
-      await AsyncStorage.setItem("hostel", hostelName);
+      await AsyncStorage.setItem("hostels", hostelName);
 
       navigation.navigate("My Hostel");
       setLoading(<StyledButtonText>Register</StyledButtonText>);

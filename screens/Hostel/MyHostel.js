@@ -28,7 +28,7 @@ const MyHostel = ({ navigation }) => {
   // console.log(hostel);
 
   const fectchHostelUser = async () => {
-    let hostel_name = await AsyncStorage.getItem("hostel");
+    let hostel_name = await AsyncStorage.getItem("hostels");
     // console.log(hostel_name)
     setHostelName(hostel_name);
 
@@ -88,7 +88,7 @@ const MyHostel = ({ navigation }) => {
                 />
                 <View>
                   <Text style={styles.name}>{item.data.firstName}</Text>
-                  <Text style={styles.subTitle}>My name is barry allen</Text>
+                  {/* <Text style={styles.subTitle}>My name is barry allen</Text> */}
                 </View>
               </TouchableOpacity>
             )}
