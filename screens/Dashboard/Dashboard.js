@@ -18,7 +18,6 @@ import useAuth from "../../hooks/useAuth";
 const Dashboard = ({ navigation }) => {
   const { hostelsData } = useAuth();
   const [filteredDataSource, setFilteredDataSource] = useState(hostelsData);
-  console.log(filteredDataSource);
   const [search, setSearch] = useState("");
 
   useEffect(() => {

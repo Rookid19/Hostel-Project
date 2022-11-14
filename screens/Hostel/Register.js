@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
@@ -32,7 +38,7 @@ const Register = ({ route, navigation }) => {
     guardianContact != "";
 
   const submit = async () => {
-    let hostel_name = await AsyncStorage.getItem("my_hostel");
+    let hostel_name = await AsyncStorage.getItem("hostel");
 
     if (hostel_name != null) {
       alert("You cannot select more than 1 hostels");
@@ -59,70 +65,76 @@ const Register = ({ route, navigation }) => {
           guardianContact,
         }
       ).catch((error) => alert(error.message));
-      await AsyncStorage.setItem("my_hostel", hostelName);
+      await AsyncStorage.setItem("hostel", hostelName);
 
       navigation.navigate("My Hostel");
       setLoading(<StyledButtonText>Register</StyledButtonText>);
     }
   };
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Text style={styles.space}></Text>
-      <CustomTextInput
-        label="First name"
-        icon="user"
-        onChangeText={(text) => setFirstName(text)}
-        value={firstName}
-      />
-      <CustomTextInput
-        label="Last name"
-        icon="user"
-        onChangeText={(text) => setLastName(text)}
-        value={lastName}
-      />
-      <CustomTextInput
-        label="Student ID"
-        icon="credit-card"
-        onChangeText={(text) => setStudentId(text)}
-        value={studentId}
-      />
-      <CustomTextInput
-        label="Contact"
-        icon="phone-call"
-        onChangeText={(text) => setContact(text)}
-        value={contact}
-        keyboardType="numeric"
-      />
-      <CustomTextInput
-        label="Program"
-        icon="layout"
-        onChangeText={(text) => setProgram(text)}
-        value={program}
-      />
-      <CustomTextInput
-        label="Level"
-        icon="layers"
-        onChangeText={(text) => setLevel(text)}
-        value={level}
-        keyboardType="numeric"
-      />
-      <CustomTextInput
-        label="Guardian Name"
-        icon="user"
-        onChangeText={(text) => setGuardianName(text)}
-        value={guardianName}
-      />
-      <CustomTextInput
-        label="Guardian Contact"
-        icon="phone-call"
-        onChangeText={(text) => setGuardianContact(text)}
-        value={guardianContact}
-        keyboardType="numeric"
-      />
-      <StyledButton style={styles.button} disabled={!valid} onPress={submit}>
-        {loading}
-      </StyledButton>
-    </ScrollView>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      keyboardVerticalOffset={90}
+    >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <Text style={styles.space}></Text>
+        <CustomTextInput
+          label="First name"
+          icon="user"
+          onChangeText={(text) => setFirstName(text)}
+          value={firstName}
+        />
+        <CustomTextInput
+          label="Last name"
+          icon="user"
+          onChangeText={(text) => setLastName(text)}
+          value={lastName}
+        />
+        <CustomTextInput
+          label="Student ID"
+          icon="credit-card"
+          onChangeText={(text) => setStudentId(text)}
+          value={studentId}
+        />
+        <CustomTextInput
+          label="Contact"
+          icon="phone-call"
+          onChangeText={(text) => setContact(text)}
+          value={contact}
+          keyboardType="numeric"
+        />
+        <CustomTextInput
+          label="Program"
+          icon="layout"
+          onChangeText={(text) => setProgram(text)}
+          value={program}
+        />
+        <CustomTextInput
+          label="Level"
+          icon="layers"
+          onChangeText={(text) => setLevel(text)}
+          value={level}
+          keyboardType="numeric"
+        />
+        <CustomTextInput
+          label="Guardian Name"
+          icon="user"
+          onChangeText={(text) => setGuardianName(text)}
+          value={guardianName}
+        />
+        <CustomTextInput
+          label="Guardian Contact"
+          icon="phone-call"
+          onChangeText={(text) => setGuardianContact(text)}
+          value={guardianContact}
+          keyboardType="numeric"
+        />
+        <StyledButton style={styles.button} disabled={!valid} onPress={submit}>
+          {loading}
+        </StyledButton>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

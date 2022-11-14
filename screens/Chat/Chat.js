@@ -9,13 +9,21 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Colors } from "../../utils/styles";
 import { StatusBar } from "expo-status-bar";
-import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../../firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
 
 // import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -26,6 +34,7 @@ const Chat = ({ navigation, route }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Chat",
+      headerTitleAlign: "center",
       headerTitle: () => (
         <Text style={{ fontSize: 20, fontFamily: "Medium" }}>
           {route?.params?.chatName}
@@ -34,10 +43,16 @@ const Chat = ({ navigation, route }) => {
     });
   }, [navigation]);
 
+  let uniqueChatID = [auth?.currentUser?.email, route?.params?.id]
+    .sort()
+    .join("");
+
+  //send message functions
   const sendMessage = async () => {
     Keyboard.dismiss();
 
-    await addDoc(collection(db, "chats", route?.params?.id, "messages"), {
+    await addDoc(collection(db, "chats", uniqueChatID, "messages"), {
+      senderId: route?.params?.id,
       timestamp: serverTimestamp(),
       message: input,
       displayName: auth.currentUser.displayName,
@@ -45,17 +60,50 @@ const Chat = ({ navigation, route }) => {
     });
     setInput("");
   };
+
+  useLayoutEffect(() => {
+    const unsub = onSnapshot(
+      query(
+        collection(db, "chats", uniqueChatID, "messages"),
+        orderBy("timestamp", "asc")
+      ),
+      (snapshot) => {
+        setMessages(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+      }
+    );
+    return unsub;
+  }, [route]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : null}
         style={styles.container}
         keyboardVerticalOffset={90}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
-            <ScrollView></ScrollView>
+            <ScrollView contentContainerStyle={{ paddingTop: 15 }}>
+              {messages.map(({ id, data }) =>
+                data.email == auth.currentUser.email ? (
+                  <View key={id} style={styles.reciever}>
+                    <Text style={styles.recieverText}>{data.message} </Text>
+                    {/* <Text style={styles.reciverName}>{data.displayName}</Text> */}
+                  </View>
+                ) : (
+                  <View key={id} style={styles.sender}>
+                    <Text style={styles.senderText}>{data.message}</Text>
+                    {/* <Text style={styles.senderName}>{data.displayName}</Text> */}
+                  </View>
+                )
+              )}
+            </ScrollView>
             <View style={styles.footer}>
               <TextInput
                 placeholder="Message"
@@ -86,7 +134,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "#ECECEC",
     alignSelf: "flex-end",
-    borderRadius: 20,
+    borderRadius: 15,
     marginRight: 15,
     marginBottom: 20,
     maxWidth: "80%",
@@ -96,7 +144,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "#2B68E6",
     alignSelf: "flex-start",
-    borderRadius: 20,
+    borderRadius: 15,
     margin: 15,
     maxWidth: "80%",
     position: "relative",
@@ -104,8 +152,6 @@ const styles = StyleSheet.create({
   senderText: {
     color: "white",
     fontWeight: "500",
-    marginLeft: 10,
-    marginBottom: 15,
   },
   senderName: {
     left: 10,
@@ -113,11 +159,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "white",
   },
-  reciverText: {
+  recieverText: {
     color: "black",
     fontWeight: "500",
-    marginLeft: 10,
-    marginBottom: 15,
   },
   reciverName: {
     left: 10,

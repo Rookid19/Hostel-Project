@@ -4,13 +4,12 @@ import { getStorage } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD8mf2SCz4shdcSXnypZNYnVav-cSx42zc",
-  authDomain: "hostel-app-bb0da.firebaseapp.com",
-  projectId: "hostel-app-bb0da",
-  storageBucket: "hostel-app-bb0da.appspot.com",
-  messagingSenderId: "326372646202",
-  appId: "1:326372646202:web:26df0caf46d6eaa0170403",
-  measurementId: "G-JPSPLL119Q"
+    apiKey: "AIzaSyCwWH29mAK8E6jclX8GUY8qgrx8GQ9337M",
+    authDomain: "hostel-connect.firebaseapp.com",
+    projectId: "hostel-connect",
+    storageBucket: "hostel-connect.appspot.com",
+    messagingSenderId: "393354522972",
+    appId: "1:393354522972:web:c37d92ff361f1341541199"
 };
 
 const app = initializeApp(firebaseConfig);

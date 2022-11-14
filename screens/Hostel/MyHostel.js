@@ -25,10 +25,10 @@ const MyHostel = ({ navigation }) => {
     ({ id }) => id !== auth?.currentUser?.email
   );
 
-  console.log(hostel);
+  // console.log(hostel);
 
   const fectchHostelUser = async () => {
-    let hostel_name = await AsyncStorage.getItem("my_hostel");
+    let hostel_name = await AsyncStorage.getItem("hostel");
     // console.log(hostel_name)
     setHostelName(hostel_name);
 
@@ -51,8 +51,6 @@ const MyHostel = ({ navigation }) => {
     fectchHostelUser();
   }, []);
 
-
-
   return (
     <SafeAreaView>
       {hostelName == null ? (
@@ -68,7 +66,7 @@ const MyHostel = ({ navigation }) => {
               color="black"
               style={styles.icon}
             />
-            <Text style={styles.header}>{hostelName} hostel</Text>
+            <Text style={styles.header}>{hostelName} </Text>
           </TouchableOpacity>
           <FlatList
             data={filteredHostelData}
@@ -78,7 +76,7 @@ const MyHostel = ({ navigation }) => {
                 onPress={() =>
                   navigation.navigate("Chat", {
                     chatName: item?.data?.firstName,
-                    id: item?.id
+                    id: item?.id,
                   })
                 }
               >
