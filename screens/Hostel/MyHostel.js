@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,53 +16,43 @@ import { Colors } from "../../utils/styles";
 import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-const MyHostel = ({ navigation, route }) => {
+const { height } = Dimensions.get("window");
+const MyHostel = ({ navigation }) => {
   const [hostel, setHostel] = useState([]);
-  const [hostelName,setHosteName] = useState("")
-
-  const abc = async () => {
-    const docRef = doc(
-      db,
-      "Admin",
-      "usersHostels"
-      //   "Sterner",
-      //   auth?.currentUser?.email
-    );
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-  };
+  const [hostelName, setHostelName] = useState("");
+  const [info, setInfo] = useState("");
 
   const fectchHostelUser = async () => {
     let hostel_name = await AsyncStorage.getItem("my_hostel");
-    setHosteName(hostel_name)
-    // console.log(c);
-    const q = query(collection(db, "Admin", "usersHostels", hostel_name));
-    const querySnapshot = await getDocs(q);
+    // console.log(hostel_name)
+    setHostelName(hostel_name);
 
-    setHostel(
-      querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        data: doc.data(),
-      }))
-    );
+    if (hostel_name == null) {
+      setInfo("No hostel selected");
+    } else {
+      const q = query(collection(db, "Admin", "usersHostels", hostel_name));
+      const querySnapshot = await getDocs(q);
+
+      setHostel(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      );
+    }
   };
 
   useEffect(() => {
     fectchHostelUser();
-  }, []);
+  }, [navigation]);
 
   // console.log("hostels---> " + JSON.stringify(hostel));
 
   return (
     <SafeAreaView>
-      {hostel.length == 0 ? (
+      {hostelName == null ? (
+        <Text style={styles.info}>{info}</Text>
+      ) : hostel.length == 0 ? (
         <ActivityIndicator style={{ marginTop: 50 }} size="large" />
       ) : (
         <>
@@ -134,5 +125,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginTop: -30,
     marginBottom: 15,
+  },
+  info: {
+    textAlign: "center",
+    marginTop: height / 3,
+    fontFamily: "Medium",
+    fontSize: 22,
   },
 });

@@ -137,7 +137,6 @@ export const AuthProvider = ({ children }) => {
     []
   );
 
-
   // allows you to memoize expensive functions so that you can avoid calling them on every render
   const memoVaue = useMemo(
     () => ({

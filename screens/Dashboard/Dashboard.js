@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "../../utils/styles";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FlatList } from "react-native-gesture-handler";
@@ -18,7 +18,12 @@ import useAuth from "../../hooks/useAuth";
 const Dashboard = ({ navigation }) => {
   const { hostelsData } = useAuth();
   const [filteredDataSource, setFilteredDataSource] = useState(hostelsData);
+  console.log(filteredDataSource);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    setFilteredDataSource(hostelsData);
+  }, [hostelsData]);
 
   // Searh Functionality
   const searchFilterFunction = (text) => {
@@ -65,6 +70,7 @@ const Dashboard = ({ navigation }) => {
           search={true}
           icon="search"
           onChangeText={(text) => searchFilterFunction(text)}
+          value={search}
         />
 
         <FlatList
