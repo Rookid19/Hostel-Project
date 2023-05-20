@@ -1,4 +1,4 @@
-Hostel-Project
+## Hostel-Project
 Hostel-Project is an application designed for students residing in the same hostel to connect and chat with each other. It provides a platform for easy communication and interaction within the hostel community.
 
 Features
