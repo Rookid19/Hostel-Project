@@ -12,7 +12,7 @@ Secure and private conversations within the hostel network
 ## Installation
 To use Hostel-Project, follow these steps:
 
-Clone the repository: git clone https://github.com/your-username/hostel-project.git
+Clone the repository: git clone https://github.com/Rookid19/Hostel-Project
 Install the required dependencies: npm install
 Start the application: npm start
 Access the application in your web browser at http://localhost:3000
