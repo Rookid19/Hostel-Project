@@ -1,13 +1,13 @@
 import {
   ScrollView,
-  StyleSheet, 
+  StyleSheet,
   Text,
   TouchableOpacity,
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors, StyledButton, StyledButtonText } from "../../utils/styles";
-import CustomTextInput from "../../components/CustomTextInput";
+import CustomTextInput from "../../components/CustomTextInput.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { CustomModal } from "../../components/CustomModal";
@@ -98,7 +98,7 @@ const Admin = () => {
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("download url --- > " + downloadURL);
-          addDoc(collection(db, "Admin", "hostels","info"), {
+          addDoc(collection(db, "Admin", "hostels", "info"), {
             name,
             location,
             fees,
